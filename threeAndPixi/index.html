@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Three And Pixi</title>
+  <link rel="stylesheet" href="../asset/css/base.css">
+  <link rel="stylesheet" href="./index.css">
+
+  <!-- Three -->
+  <script src="../asset/js/three.min.js"></script>
+  <!-- Pixi -->
+  <script src="../asset/js/pixi.min.js"></script>
+</head>
+
+<body>
+  <div class="game-1" id="game-1"></div>
+
+  <script>
+    this.app = new PIXI.Application(window.innerWidth, window.innerHeight, {
+      backgroundColor: 0xff8400,
+      antialias: false,
+      legacy: true,
+      clearBeforeRender: true,
+      autoResize: true,
+    });
+    document.getElementById('game-1').appendChild(this.app.view);
+
+    function deg2rad(_degrees) {
+      return (_degrees * Math.PI / 180);
+    }
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // var cubecam = new THREE.CubeCamera(0.1, 1);
+    // cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+    // scene.add(cubecam);
+
+
+    var renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+    });
+    renderer.setClearColor(0x1099bb, 0);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    camera.position.z = -110;
+    // Cube Mesh
+    // var cubeMesh = new THREE.Mesh(
+    //   new THREE.BoxGeometry(32, 32, 32),
+    //   new THREE.MeshPhongMaterial()
+    // );
+    // cubecam.position.z = cubeMesh.position.z = 5;
+
+    var cubeGeometry = new THREE.CubeGeometry(50, 50, 50);
+    var cubeMaterial = new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff});
+    var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.position.y = 30;
+    cube.position.x = 10;
+    cube.position.z = 500;
+    scene.add(cube);
+
+    // scene.add(cubeMesh);
+
+    var THREE_TEXTURE = PIXI.BaseTexture.fromCanvas(renderer.domElement, PIXI.SCALE_MODES.LINEAR);
+    var THREE_SPRITE = new PIXI.Sprite.from(new PIXI.Texture(THREE_TEXTURE));
+
+    var somePIXIsprite = new PIXI.Sprite.fromImage('../asset/images/cat.png');
+    somePIXIsprite.scale.set(0.2);
+    somePIXIsprite.width = 1024;
+    somePIXIsprite.height = 912;
+    somePIXIsprite.x = window.innerWidth / 3;
+    somePIXIsprite.y = window.innerHeight / 3;
+    somePIXIsprite.anchor.set(0.5);
+    this.app.stage.addChild(somePIXIsprite);
+    this.app.stage.addChild(THREE_SPRITE);
+
+    var render = function () {
+
+      camera.lookAt(scene.position);
+
+      // cubeMesh.rotation.x += 0.01;
+      // cubeMesh.rotation.y += 0.01;
+      // cubeMesh.rotation.z += 0.01;
+      cube.rotation.z += 0.01;
+
+
+      // cubeMesh.visible = false;
+      // cubecam.update(renderer, scene);
+      // cubeMesh.visible = true;
+
+      renderer.render(scene, camera);
+
+      THREE_TEXTURE.update();
+
+      requestAnimationFrame(render)
+    };
+
+    render();
+  </script>
+</body>
+
+</html>

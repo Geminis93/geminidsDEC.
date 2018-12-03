@@ -44,7 +44,6 @@
     var texture = THREE.ImageUtils.loadTexture("../asset/images/cat.png");
     var cubeMaterial = new THREE.MeshBasicMaterial({map: texture});
     var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    console.log(cube);
     cube.rotation.x = -10;
     cube.rotation.y = -10;
     cube.position.z = 500;
